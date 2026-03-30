@@ -45,6 +45,11 @@
       "bucket_name": "sink" // IMPORTANT: Change this to your R2 bucket name, or create one with `wrangler r2 bucket create sink`
     }
   ],
+  "send_email": [
+    {
+      "name": "EMAIL_SENDER" // Cloudflare Email binding for outgoing email routing. Requires email routing to be enabled on your zone.
+    }
+  ],
   "triggers": {
     "crons": ["0 0 * * *"] // Run backup task daily at 00:00 UTC
   }

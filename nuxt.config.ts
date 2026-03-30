@@ -35,6 +35,9 @@ export default defineNuxtConfig({
     disableAutoBackup: false,
     notFoundRedirect: '',
     safeBrowsingDoh: '', // Set to DoH URL to enable auto-detection, e.g. https://family.cloudflare-dns.com/dns-query
+    resendApiKey: '', // Resend API key for email sending (set NUXT_RESEND_API_KEY)
+    emailFrom: '', // Default sender address for outgoing emails (set NUXT_EMAIL_FROM)
+    emailForwardTo: '', // Forward incoming emails to this address (set NUXT_EMAIL_FORWARD_TO)
     public: {
       previewMode: '',
       slugDefaultLength: '6',
