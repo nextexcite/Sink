@@ -1,0 +1,68 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "my-link-shortener",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-05-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "logs": { "enabled": true }
+  },
+
+  // KV namespace — stores links (key: link:{slug}) and domains (key: domain:{hostname})
+  // Create with: wrangler kv namespace create links
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+    }
+  ],
+
+  // R2 bucket — optional, used for persisted backups
+  // Create with: wrangler r2 bucket create links-backup
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "links-backup"
+    }
+  ],
+
+  // Analytics Engine — records every link click with full request metadata
+  "analytics_engine_datasets": [
+    {
+      "binding": "ANALYTICS",
+      "dataset": "links"
+    }
+  ],
+
+  // Cloudflare AI — used for optional AI-powered slug generation & page extraction
+  "ai": {
+    "binding": "AI",
+    "remote": true
+  },
+
+  // Cloudflare Email Workers — handles inbound email (requires Email Routing enabled on your zone)
+  // Docs: https://developers.cloudflare.com/email-routing/email-workers/
+  "send_email": [
+    {
+      "name": "EMAIL_SENDER" // binding for outbound email via Cloudflare Email Workers
+    }
+  ],
+
+  // Daily KV backup cron
+  "triggers": {
+    "crons": ["0 0 * * *"]
+  },
+
+  // Environment variables — set these in the Cloudflare dashboard or via `wrangler secret put`
+  // SITE_TOKEN        : API bearer token (required)
+  // RESEND_API_KEY    : Resend API key for outgoing email (optional)
+  // EMAIL_FROM        : Default sender address, e.g. noreply@yourdomain.com (optional)
+  // EMAIL_FORWARD_TO  : Forward inbound email to this address (optional)
+  // SAFE_BROWSING_DOH : DNS-over-HTTPS endpoint for phishing detection (optional)
+  "vars": {
+    "REDIRECT_STATUS_CODE": "301",
+    "CASE_SENSITIVE": "false",
+    "DISABLE_BOT_LOG": "false",
+    "LINK_CACHE_TTL": "60"
+  }
+}
